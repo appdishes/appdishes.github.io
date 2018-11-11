@@ -227,9 +227,10 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 let AuthService = class AuthService {
+    //  BASE_URL = 'http://localhost:8090/auth';
     constructor(http) {
         this.http = http;
-        this.BASE_URL = 'http://localhost:8090/auth';
+        this.BASE_URL = 'https://appdishes.herokuapp.com/8090';
     }
     register(user) {
         this.http.post(this.BASE_URL + '/register', user).subscribe();
