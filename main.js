@@ -587,8 +587,8 @@ let WebService = class WebService {
     constructor(http, sb) {
         this.http = http;
         this.sb = sb;
-        this.BASE_URL = 'http://localhost:8090';
-        // 'https://appdishes.herokuapp.com';
+        // BASE_URL = 'http://localhost:8090';
+        this.BASE_URL = 'https://appdishes.herokuapp.com';
         this.dishesStore = [];
         this.dishSubjet = new rxjs_Rx__WEBPACK_IMPORTED_MODULE_4__["Subject"]();
         this.dishes = this.dishSubjet.asObservable();
