@@ -167,23 +167,39 @@ let DishesComponent = class DishesComponent {
         this.route = route;
     }
     ngOnInit() {
-        //var id = this.route.snapshot.params.id;
+        this.webService.getDishes();
+    }
+    showAll() {
         this.webService.getDishes();
     }
     delete(dish) {
         this.webService.deleteDish(dish);
+    }
+    selectById(id) {
+        this.webService.getDishesById(id);
+    }
+    selectByName(name) {
+        this.webService.getDishesByName(name);
+    }
+    selectByType(type) {
+        this.webService.getDishesByType(type);
+    }
+    selectByCategory(category) {
+        this.webService.getDishesByCategory(category);
     }
 };
 DishesComponent = __decorate([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
         selector: 'dishes',
         template: `
+    <button (click)="showAll()" mat-raised-button color="primary">Show All</button>
+
     <div *ngFor="let dish of webService.dishes | async">
         <mat-card class="card">
-            <mat-card-title [routerLink]="['/dishes', dish.id]"  style="cursor: pointer">{{dish.id}}</mat-card-title>
-            <mat-card-content>{{dish.name}}</mat-card-content>
-            <mat-card-content>{{dish.type}}</mat-card-content>
-            <mat-card-content>{{dish.category}}</mat-card-content>
+            <mat-card-title (click)="selectById(dish.id)" style="cursor: pointer">{{dish.id}}</mat-card-title>
+            <mat-card-content (click)="selectByName(dish.name)" style="cursor: pointer">{{dish.name}}</mat-card-content>
+            <mat-card-content (click)="selectByType(dish.type)" style="cursor: pointer">{{dish.type}}</mat-card-content>
+            <mat-card-content (click)="selectByCategory(dish.category)" style="cursor: pointer">{{dish.category}}</mat-card-content>
             <mat-card-content>{{dish.description}}</mat-card-content>
             <button (click)="delete(dish)" mat-raised-button color="warn">Delete</button>
             <button [routerLink]="['/manage', dish.id]"  mat-raised-button color="primary">Update</button>
@@ -244,34 +260,27 @@ let ManageDishComponent = class ManageDishComponent {
         this.fb = fb;
         this.webService = webService;
         this.route = route;
-        this.dish = {
-            name: "",
-            type: "",
-            description: "",
-            category: "",
-            id: ""
-        };
-        this.form = fb.group({
-            name: [this.dish.name, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required],
-            type: [this.dish.type, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required],
-            category: [this.dish.category, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required],
-            description: [this.dish.description, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required]
-        });
+        this.resetDish();
     }
     ngOnInit() {
+        /**
         var id = this.route.snapshot.params.id;
         console.log("ppppp id " + id);
+
         this.webService.getDishesById(id);
-        console.log("ppppp this.webService.singleDish.name " + this.webService.singleDish.name);
-        if (this.webService.singleDish != null) {
-            this.dish = this.webService.singleDish;
+        console.log("ppppp this.webService.singleDish " + this.webService.singleDish);
+        if(this.webService.singleDish != null){
+            this.dish = this.webService.singleDish[0];
+            console.log("ppppp this.webService.dish " + this.dish);
+
             this.form = this.fb.group({
-                name: [this.dish.name, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required],
-                type: [this.dish.type, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required],
-                category: [this.dish.category, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required],
-                description: [this.dish.description, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required]
-            });
+                name: [this.dish.name, Validators.required],
+                type: [this.dish.type, Validators.required],
+                category: [this.dish.category, Validators.required],
+                description: [this.dish.description, Validators.required]
+                })
         }
+        */
     }
     onSubmit() {
         this.dish.name = this.form.value.name;
@@ -279,14 +288,30 @@ let ManageDishComponent = class ManageDishComponent {
         this.dish.category = this.form.value.category;
         this.dish.description = this.form.value.description;
         this.webService.postDish(this.dish);
+        //this.resetDish();
     }
     isValid(control) {
         return this.form.controls[control].invalid && this.form.controls[control].touched;
     }
+    resetDish() {
+        this.dish = {
+            name: "",
+            type: "",
+            description: "",
+            category: "",
+            id: ""
+        };
+        this.form = this.fb.group({
+            name: [this.dish.name, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required],
+            type: [this.dish.type, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required],
+            category: [this.dish.category, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required],
+            description: [this.dish.description, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required]
+        });
+    }
 };
 ManageDishComponent = __decorate([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-        //  moduleId: module.id,
+        //  moduleId: module.id,//this does not work for some reason. However it works without it.
         selector: 'manage',
         template: __webpack_require__(/*! ./dishes.manage.component.html */ "./src/app/dishes.manage.component.html"),
         styles: [`
@@ -366,10 +391,8 @@ NavComponent = __decorate([
         selector: 'nav',
         template: `
         <mat-toolbar color="primary">
-            <button mat-button routerLink="/" >Dishes</button>
-            <button mat-button routerLink="/dishes" >Messages</button>
+            <button mat-button routerLink="/" >View Dishes</button>
             <button mat-button routerLink="/manage" >Manage Dish</button>
-
             </mat-toolbar>
     `
     }),
@@ -384,12 +407,13 @@ NavComponent = __decorate([
 /*!********************************!*\
   !*** ./src/app/web.service.ts ***!
   \********************************/
-/*! exports provided: WebService */
+/*! exports provided: WebService, Dish */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WebService", function() { return WebService; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Dish", function() { return Dish; });
 /* harmony import */ var _angular_http__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/http */ "./node_modules/@angular/http/fesm2015/http.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var rxjs_add_operator_toPromise__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs/add/operator/toPromise */ "./node_modules/rxjs-compat/_esm2015/add/operator/toPromise.js");
@@ -405,14 +429,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 
 
 
@@ -422,11 +438,14 @@ let WebService = class WebService {
     constructor(http, sb) {
         this.http = http;
         this.sb = sb;
-        // BASE_URL = 'http://localhost:8090';
+        //BASE_URL = 'http://localhost:8090';
         this.BASE_URL = 'https://appdishes.herokuapp.com';
         this.dishesStore = [];
         this.dishSubjet = new rxjs_Rx__WEBPACK_IMPORTED_MODULE_3__["Subject"]();
         this.dishes = this.dishSubjet.asObservable();
+        this.singleDishStore = new Dish();
+        this.singleDishSubjet = new rxjs_Rx__WEBPACK_IMPORTED_MODULE_3__["Subject"]();
+        this.singleDish = this.singleDishSubjet.asObservable();
         this.getDishes();
     }
     getDishes() {
@@ -438,28 +457,56 @@ let WebService = class WebService {
         });
     }
     getDishesById(id) {
-        this.http.get(this.BASE_URL + '/dishes' + '/' + id).subscribe(response => {
-            // this.dishesStore = response.json();
-            //  this.dishSubjet.next(this.dishesStore);
-            //  if(id != null){
-            this.singleDish = response.json()[0];
-            console.log("4445 id " + id);
-            console.log("4445 response.json()[0] " + response.json()[0].name);
-            console.log("4445 this.singleDish.name " + this.singleDish.name);
-            // }
-        }, error => {
-            this.handleError("Unable to get dishes");
-        });
+        if (id != null || id != '') {
+            this.http.get(this.BASE_URL + '/dishes' + '/' + id).subscribe(response => {
+                this.dishesStore = response.json();
+                this.dishSubjet.next(this.dishesStore);
+            }, error => {
+                this.handleError("Unable to get dishes");
+            });
+        }
+    }
+    getDishesByName(name) {
+        if (name != null || name != '') {
+            let data = { "name": name };
+            this.http.get(this.BASE_URL + '/dishes/by', { params: data }).subscribe(response => {
+                console.log("oooo" + response.json());
+                this.dishesStore = response.json();
+                this.dishSubjet.next(this.dishesStore);
+            }, error => {
+                this.handleError("Unable to get dishes");
+            });
+        }
+    }
+    getDishesByCategory(category) {
+        if (category != null || category != '') {
+            let data = { "category": category };
+            this.http.get(this.BASE_URL + '/dishes/by', { params: data }).subscribe(response => {
+                console.log("oooo" + response.json());
+                this.dishesStore = response.json();
+                this.dishSubjet.next(this.dishesStore);
+            }, error => {
+                this.handleError("Unable to get dishes");
+            });
+        }
+    }
+    getDishesByType(type) {
+        if (type != null || type != '') {
+            let data = { "type": type };
+            this.http.get(this.BASE_URL + '/dishes/by', { params: data }).subscribe(response => {
+                console.log("oooo" + response.json());
+                this.dishesStore = response.json();
+                this.dishSubjet.next(this.dishesStore);
+            }, error => {
+                this.handleError("Unable to get dishes");
+            });
+        }
     }
     postDish(dish) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                var response = yield this.http.post(this.BASE_URL + '/dishes', dish).toPromise();
-                this.informCreated("dish " + response.json().name + " was created!");
-            }
-            catch (error) {
-                this.handleError("Unable to post dish");
-            }
+        this.http.post(this.BASE_URL + '/dishes', dish).subscribe(response => {
+            this.informCreated("dish " + response.json().name + " was created!");
+        }, error => {
+            this.handleError("Unable to post dish");
         });
     }
     deleteDish(dish) {
@@ -489,6 +536,8 @@ WebService = __decorate([
     __metadata("design:paramtypes", [_angular_http__WEBPACK_IMPORTED_MODULE_0__["Http"], _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatSnackBar"]])
 ], WebService);
 
+class Dish {
+}
 
 
 /***/ }),
