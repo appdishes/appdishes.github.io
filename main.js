@@ -393,7 +393,7 @@ HomeComponent = __decorate([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\r\n       <!-- <mat-toolbar color=\"primary\">\r\n            <button mat-button routerLink=\"/dishes\" >View Dishes</button>\r\n            <button mat-button routerLink=\"/create\" >Create Dish</button>\r\n            <input type=\"search\"/><button mat-button (click)=\"searchDishes()\" >Search Dishes</button> \r\n\r\n            </mat-toolbar>\r\n          -->\r\n\r\n<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">\r\n<div class=\"topnav\">\r\n    <a class=\"lnk active\" href=\"./dishes\">View Dishes</a>\r\n    <a class=\"lnk active\" href=\"./create\">Create Dish</a>\r\n  </div>\r\n"
+module.exports = "\r\n  <mat-toolbar color=\"primary\">\r\n            <button mat-button routerLink=\"/dishes\" >View Dishes</button>\r\n            <button mat-button routerLink=\"/create\" >Create Dish</button>\r\n\r\n            </mat-toolbar>\r\n       <!--\r\n                     <input type=\"search\"/><button mat-button (click)=\"searchDishes()\" >Search Dishes</button> \r\n\r\n                     \r\n<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">\r\n<div class=\"topnav\">\r\n    <a class=\"lnk active\" href=\"dishes\">View Dishes</a>\r\n    <a class=\"lnk active\" href=\"create\">Create Dish</a>\r\n  </div>\r\n           -->\r\n\r\n"
 
 /***/ }),
 
