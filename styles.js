@@ -555,7 +555,7 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\Liliya\Documents\Centennial\API course\assignments\2\dishes.fe\src\styles.css */"./src/styles.css");
+module.exports = __webpack_require__(/*! C:\Users\Liliya\Documents\Centennial\API course\final project\dishes.fe\src\styles.css */"./src/styles.css");
 
 
 /***/ })
