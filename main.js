@@ -393,7 +393,7 @@ HomeComponent = __decorate([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">\r\n<div class=\"topnav\">\r\n    <a class=\"lnk active\" href=\"dishes\">View Dishes</a>\r\n    <a class=\"lnk active\" href=\"create\">Create Dish</a>\r\n  </div>\r\n  "
+module.exports = "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">\r\n<div class=\"topnav\">\r\n    <a class=\"lnk active\" href=\"/dishes\">View Dishes</a>\r\n    <a class=\"lnk active\" href=\"/create\">Create Dish</a>\r\n  </div>\r\n  "
 
 /***/ }),
 
